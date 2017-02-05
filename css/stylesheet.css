@@ -1,0 +1,235 @@
+/*=======shared style to all pages start here down below========*/
+body{
+		background-color:#F9FAFB ;
+		margin: 0 auto;
+}
+.cont_container{
+	width:350px;
+	min-height: 250px;
+	margin: 25vh auto;
+	background-color: #F6F7F9;
+	box-shadow: 0 0px 4px 1px rgba(0,0,0,0.1);
+	border-radius: 4px 4px 4px 4px;
+	position: relative;
+}
+
+.head{
+	border-bottom:3px solid #F3F5F6;
+	color: #FFF;
+	background-color:#FD7056 ; /*#FF605F;*/
+	border-radius: 3px 3px 0 0 ;
+	height: 50px;
+	text-align: center;
+	text-transform: capitalize;
+	font-size: 15pt;
+	font-weight: 600;
+	font-family:tahoma;
+	line-height: 50px;
+	position: relative;
+}
+.backIcon{
+	/*container hold img that take U to previous pages*/
+	position: absolute;
+	width: 30px
+	height:30px;
+	left: 10px;
+	top:0px;
+}
+img{
+	/*img that take U to previous pages*/
+	margin-top: 15px;
+	width: 15px;
+	height: 15px;
+}
+.para_text{
+	/*middle text in index && regForms*/
+	text-align: center;
+	font-family: monospace;
+	padding: 15px;
+	color:#888;
+}
+.left_divider_Sec,.right_divider_Sec{
+	background-color:#FFF;
+	float: left;
+	width: 50%;
+	height: 80px;
+	line-height: 80px;
+	margin-top: 10px;
+	border-radius: 3px 0 0 3px;
+	box-shadow: 0 0px 5px 0px rgba(0,0,0,0.1);
+}
+.right_divider_Sec{
+	float:right;
+	border-radius: 0 3px 3px 0;
+}
+.left_divider_Sec>a,.right_divider_Sec>a{
+	text-decoration: none;
+	color: #888;
+	}
+.left_divider_Sec>a:hover,.right_divider_Sec>a:hover{
+	color: #FD7056 ;
+	}
+.FormsContainer{
+	background-color: #FFF;
+	width: 100%;
+	height: 180px;
+	margin-top: 10px;
+	border-radius: 3px;
+	box-shadow: 0 0px 5px 0px rgba(0,0,0,0.1);
+	position: relative;
+}
+#textBox1{
+	/*textboxs in first row*/
+	width: 45%;
+	margin: 10px 2px 0;
+	height: 20px;
+	border:1px solid #E0DFE2;
+	font-family: monospace;
+}
+* input {
+	text-indent: 5px;
+	border-radius: 3px;
+}
+* input:focus {
+	outline: none;
+  box-shadow: 0 0 2px 1px rgba(0,0,0,.1);
+	transition: 50ms ease-out 0s;
+}
+#textBoxHrz{
+	/*longest textboxs*/
+		width: 94.2%;
+		height: 20px;
+		margin-top: 10px;
+		border:1px solid #E0DFE2;
+		font-family: monospace;
+}
+#textBox3{
+		/*textboxs in forth row*/
+		width: 45%;
+		margin: 10px 2px 0 5px;
+		height: 20px;
+		border:1px solid #E0DFE2;
+		font-family: monospace;
+}
+/*[][][][][][][[][]]]BUTTONS STYLING[][]][]][][][]*/
+#logLINK{
+	position: absolute;
+	left: 10px;
+	bottom: 15px;
+}
+#logLINK a{
+	text-indent: 5px;
+	text-decoration: none;
+	color:#6CC7FB;
+	border-bottom: 2px solid #6CC7FB;
+}
+#btnReg{
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+	background-color:#69CB75; /*#6CC7FB;*/
+	color: #Fff;
+	border:none;
+	height: 25px;
+	width: 100px;
+	font-family: monospace;
+}
+.logoutSection{
+	position: absolute;
+	width: 30px
+	height:30px;
+	right: 20px;
+	top:0px;
+	z-index: 99;
+}
+.logoutSection a{
+	font-family: monospace;
+	font-size: 10pt;
+	font-weight: lighter;
+	text-decoration: none;
+	color: #999;
+	border:1px solid #E0DFE2;
+	border-radius: 3px;
+	padding: 3px 2px 4px;
+}
+.logoutSection a:hover{
+	color: rgba(253, 112, 86, .91);
+}
+/*[][][][][][][[][]]]BUTTONS STYLING[][]][]][][][]*/
+
+/*++++++++++++++++++SEARCHING BOX STYLING++++++++++++++++++++++++*/
+.searchBoxHOLDER{
+	position:absolute;
+	width: 300px;
+	height: 50px;
+	left: 0px;
+}
+#searchBox{
+	width:200px;
+	height: 25px;
+	margin: 10px 0 0 -36px;
+	border:1px solid #E0DFE2;
+	border-right: none;
+	font-family: 'source sans pro';
+	font-size: 9pt;
+	font-weight: lighter;
+	color: #999;
+}
+#searchBox:focus{
+	outline: none;
+}
+.searchIcon{
+	height: 28px;
+	width: 25px;
+	border:1px solid #E0DFE2;
+	border-left: none;
+	border-radius: 0 3px 3px 0px;
+	text-align: center;
+	position: relative;
+	top:-4px;
+	left: -4px;
+	margin-left: -5px;
+	color: #fff;
+	font-size: 0pt;
+	background-color: transparent;
+}
+.searchIcon:focus,.searchIcon:hover{
+	outline-color: transparent;
+	cursor: pointer;
+}
+/*++++++++++++++++++SEARCHING BOX STYLE END HERE++++++++++++++++++++++++*/
+
+/*==============LIBRARIN PAGES STYLE===============*/
+.librarianLink{
+	clear: both;
+	position: absolute;
+	border-radius: 0 0 3px 3px;
+	bottom: 5px;
+	left: 35%;
+	width: 100px;height: 25px;
+	line-height: 25px;
+	background-color: #FFF;
+	z-index: 1;
+}
+.librarianLink > a{
+	text-decoration: none;
+	color: #737373;
+}
+.librarianLink > a:hover{
+	color: #FD7056;
+}
+/*=^============^=LIBRARIN PAGES STYLE END HERE=^=============^=*/
+
+#notficationBar{
+	position: relative;
+	bottom: 0px;
+	height: 30px;
+	width: 55%;
+	margin:  0 auto;
+	text-align: center;
+	line-height: 30px;
+	font-family: 'source sans pro';
+	font-size: 11pt;
+	font-weight: lighter;
+	color:#999;
+}
