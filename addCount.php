@@ -1,7 +1,24 @@
 <?php
 
 require_once("Database.php");
+require_once("BookIdHelper.php");
 $database=new Database();
+
+$book_single_row=null;
+if(isset($_GET['book_id'])){
+    BookIdHelper::storeBookId($_GET['book_id']);
+    $book_single_row=$database->getABookToEdit($_GET['book_id']);
+}else{
+    $book_single_row=$database->getABookToEdit(BookIdHelper::getBookId());
+}
+
+
+if(isset($_POST['newCount'])){
+
+     $newCount=$_POST['newCount'];         
+     $database->setNewCount(BookIdHelper::getBookId(),$newCount);
+
+}
 
 
 ?>
@@ -17,7 +34,7 @@ $database=new Database();
 	  box-shadow:none;
 	}
 	.indexcont_container{
-	width:60%;
+	width:40%;
 	min-height: 450px;
 	margin: 0 auto;
 	background-color: #f8f9f9;
@@ -169,12 +186,12 @@ left: 0px;
 		height: 50px;
 	}
 	#content_col{
-	width:70%;
+	width:97%;
 	height: 394px;
 	background:#fff;
 	overflow-y: auto;
 	position: absolute;
-	right:0;
+	left:0;
 	top: 53px;
 	padding: 0 10px;
 	z-index:;
@@ -337,6 +354,26 @@ margin: 0 auto;
     border-radius: 0px;
   background-color: rgba(0,0,0,0.3);
 }
+
+#addcountICON{
+	font-size: 13pt;
+	font-weight: bold;
+	text-decoration: none;
+	color: #00B6E3;
+}
+#editICON{
+	font-size: 12pt;
+	font-weight: bold;
+	text-decoration: none;
+	color: #999;
+
+}
+#deleteICON{
+	font-size: 10pt;
+	font-weight: bold;
+	text-decoration: none;
+	color: #FD7056 ;
+}
 </style>
 </head>
 <body>
@@ -349,19 +386,9 @@ margin: 0 auto;
 						<input type="text" name="" placeholder="Library Finder" id="searchBox">
 						<input type="submit" name="" class="searchIcon">
 				</span>
-				<span class="logoutSection"><a href="librarianIndex.php">Home</a></span>
+				<span class="logoutSection"><a href="allbook.php">Home</a></span>
 			</div>
-		<div class="left_Dashboard">
-      		<div class=""><a href="index.php"><img src="arrow.png"/></a></div>
-          <a href="allbook.php"><div class="dashboardBox">
-            &nbsp;&nbsp;&nbsp;&nbsp;All books
-            <span class="counter"><?php echo $database->getCountAllBook()?></span>
-          </div></a>
-            </a>
-						  <!--<div class="parentbox2" style="text-align:center;">
-						      <a class="not_intended_links" href="manage.php">Manage Books</a>
-						  </div>-->
-		</div>
+
 		<div id="content_col">
 			<h3 id="heading">All books</h3>
 			<hr id="hrzLine">
@@ -380,28 +407,29 @@ margin: 0 auto;
 
   			<table id="bookshelf" width="100%" border="1">
   			
-  			    <?php 
-  			        
-  			     foreach($database->getAllBooks() as $value){ 
-  			      			            
-  			         echo"<tr>";
-				     echo "<td>".$value['id']."</td>";
-				     echo "<td>".$value['title']."</td>";
-				     echo "<td>".$value['author']."</td>";
-				      echo "<td>".$value['count']."</td>";
-				     echo "<td  width='18% align='center'>";
-				     echo "<span><a href='addCount.php?book_id=".$value['id']."'id='addcountICON'>&#x271a;</a></span>";							 
-					 echo "<span><a href='addCount.php?book_id=".$value['id']."' id='editICON'>&#x270e;</a></span>";
-					 echo "<span><a href='allbook.php?delete=true' id='deleteICON'>&#10060;</a></span></td>";
-				     echo"</tr>"; 
-				      			            
-  			         }
-  			    
-  			     ?>
-  				  			
+  			<?php
+  			       $book_single_row=$database->getABookToEdit(BookIdHelper::getBookId());
+  			       echo"<tr>";
+				   echo "<td>".$book_single_row[0]['id']."</td>";
+				   echo "<td>".$book_single_row[0]['title']."</td>";
+				   echo "<td>".$book_single_row[0]['author']."</td>";
+				   echo "<td>".$book_single_row[0]['count']."</td>";
+				   echo "<td  width='18%' align='center'>";
+				   echo "<span><a href='' id='editICON'>&#x270e;</a></span>";
+				   echo "<span><a href='' id='deleteICON'>&#10060;</a></span></td>";
+				   echo"</tr>"; 	
+  			
+  			?>
   			
   			</table>
   		</div>
+      <form action="addCount.php" method="post">
+        <fieldset id="fieldset2">
+           <legend>Edit Book count</legend>
+           <input type="text" name="newCount" id="textBox2"placeholder="new count"><br>
+           <input type="submit" name="sender" value="update" style="border:none;background-color:#00B6E3;color:#fff;height:22px"/>
+        </fieldset>
+      </form>
 		</div>
 
 	</div>

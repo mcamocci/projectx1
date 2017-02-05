@@ -11,10 +11,6 @@
            if(!(LoginProcessor::doTheChecks($_POST["username"],$_POST["password"],CommonInformation::$NORMAL_USER))){          
                 LoginProcessor::$value="Wrong credentials";         
            }
-      }else{
-            
-            echo "some not set";
-      
       }
    
 ?>

@@ -28,6 +28,25 @@ class Database{
     }
     
     
+    //get all books    
+    public function getAllBooks(){
+        
+            $querry="select Book.id,Book.title,Book.copy_count as count,CONCAT(Author.firstName,
+            CONCAT(' ',Author.lastName)) AS author from  Book JOIN Author ON
+                     Book.author=Author.id;";   
+                              
+            $resultset=$this->connection->query($querry);            
+            $books=array();
+            
+            while($row=$resultset->fetch_assoc()){                
+                    $books[]=$row;            
+            }
+            
+            return $books;
+    
+    }
+    
+    
 
     //get all availlable books    
     public function getAllAvaillableBooks($user_id){
@@ -115,10 +134,14 @@ class Database{
     
     public function getAllBorrowedBooks(){
     
-            $querry="select * from Book where Book.id in (select book_id from Borrowed_Book)";            
-            $resultset=$this->connection->querry();
+    
+            $querry="select Book.id,Book.title,Book.copy_count as count,CONCAT(Author.firstName,
+            CONCAT(' ',Author.lastName)) AS author from  Book JOIN Author ON
+                     Book.author=Author.id AND Book.id in (select book_id from Borrowed_Book);";  
+               
+            $resultset=$this->connection->query($querry);
             
-            $books;
+            $books=array();
             
             while($row=$resultset->fetch_assoc()){                
                     $books[]=$row;            
@@ -345,6 +368,20 @@ class Database{
         
     }
     
+    
+     //set new book counts   
+    public function setNewCount($book_id,$count){
+    
+        $sql="UPDATE Book SET copy_count=$count WHERE Book.id=$book_id";
+        
+        if($this->connection->query($sql)){
+            echo "it worked";           
+        }
+       
+               
+    
+    }
+    
     //this function is for increasing the number of books    
     public function increaseBookCount($book_id){
     
@@ -362,8 +399,6 @@ class Database{
         }else{
             return false;
         }
-        
-       
     
     }
     
@@ -371,11 +406,12 @@ class Database{
     public function getRow($id){
         $sql="SELECT * FROM User WHERE id='$id'";
         $resultSet=$this->connection->query($sql);
-        $the_single_row;
+        $the_single_row=null;
         
         while($row=$resultSet->fetch_assoc()){
             $the_single_row[]=$row;
         }
+        
         return $the_single_row;          
         
     }
@@ -384,7 +420,7 @@ class Database{
     public function getPs($id){
         $sql="SELECT Password FROM Librarian WHERE id='$id'";
         $resultSet=$this->connection->query($sql);
-        $the_single_row;
+        $the_single_row=null;
         
         while($row=$resultSet->fetch_assoc()){
             $the_single_row[]=$row;
@@ -414,9 +450,29 @@ class Database{
     
     }   
     
+     //get a book to edit   
+    public function getABookToEdit($book_id){
+        
+            $querry="select Book.id,Book.title,Book.copy_count as count,CONCAT(Author.firstName,
+            CONCAT(' ',Author.lastName)) AS author from  Book JOIN Author ON
+                     Book.author=Author.id AND Book.id=$book_id;";   
+                              
+            $resultset=$this->connection->query($querry);            
+            $books=array();
+            
+            while($row=$resultset->fetch_assoc()){                
+                    $books[]=$row;            
+            }
+            
+            return $books;
+    
+    }
   
     
 }
+
+
+   
 
 
 

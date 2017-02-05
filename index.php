@@ -3,7 +3,6 @@
     LoginProcessor::prepare();
 
     if(isset($_GET['logUserout'])){
-        echo "i was set logout";
         LoginProcessor::logout();
     }
 ?>

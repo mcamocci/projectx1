@@ -4,6 +4,13 @@
 require_once("Database.php");
 $database=new Database();
 
+$database->setNewCount(4,20);
+
+echo gettype(mysqli_real_escape_string($database->connection,12));
+
+
+
+/*
 
 
  echo "<br/>";
@@ -24,7 +31,7 @@ $database=new Database();
             echo "the password didnot match";
             
       }
-
+*/
 
 /*
 $database->borrowABook(1,2);

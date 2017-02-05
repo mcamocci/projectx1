@@ -380,31 +380,18 @@ margin: 0 auto;
   		<div class="shelf_OUT_BORDER">
 
   			<table id="bookshelf" width="100%">
-  				<tr>
-  					<td width="5%">1</td>
-  					<td width="39%">Mabala the farmer</td>
-  					<td width="25%">Edwin semzaba</td>
-  							<td  width="10%" align="center">20</td>
-  				</tr>
-  				<tr>
-  					<td>2</td>
-  					<td>Ngoswe kitovu cha uzembe</td>
-  					<td>Edwin semzaba</td>
-  							<td align="center">20</td>
-  				</tr>
-  				<tr>
-  					<td>3</td>
-  					<td>Development studies</td>
-  					<td>moro</td>
-  							<td align="center">4</td>
-  				</tr>
-  				<tr>
-  					<td>4</td>
-  					<td>Web developement</td>
-  					<td>Lupiana</td>
-  							<td align="center">10</td>
-  				</tr>
-
+  				  				
+  				 <?php   			        
+  			            foreach($database->getAllBorrowedBooks() as $value){  			            
+  			                 echo"<tr>";
+				             echo "<td>".$value['id']."</td>";
+				             echo "<td>".$value['title']."</td>";
+				             echo "<td>".$value['author']."</td>";
+				             echo "<td>".$value['count']."</td>";
+				             echo"</tr>";  			            
+  			            }  			    
+  			     ?>
+  			     
   			</table>
   		</div>
 		</div>
