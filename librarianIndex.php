@@ -1,7 +1,36 @@
 <?php
 
 require_once("Database.php");
+require_once("Book.php");
+require_once("Author.php");
+
 $database=new Database();
+
+
+if(isset($_POST['author_name'])){  
+  
+    $author=new Author();
+    
+    $name=mysqli_real_escape_string($_POST['author_name']);
+    
+    $author::insertAuthor('$name');
+    
+}else if(isset($_POST['category'])&&
+
+        isset($_POST['title'])&&
+        
+            isset($_POST['counts'])&&
+            
+             isset($_POST['author_id'])){
+             
+                    $title=mysqli_real_escape_string($_POST['title']);
+                    $category=mysqli_real_escape_string($_POST['category']);
+                    $author_id=mysqli_real_escape_string($_POST['author_id']);
+                    $counts=mysqli_real_escape_string($_POST['counts']);
+                    $book=new Book();                    
+                    $book::insertBook($title,$category,$author_id,$counts);
+
+    }
 
 
 ?>
@@ -289,25 +318,24 @@ legend{
 		<div id="content_col">
 			<h3 id="heading">Add new book(s)</h3>
 			<hr id="hrzLine">
-			<form>
-				 <fieldset id="fieldset">
+			<form action="librarianIndex.php" method="post">	 <fieldset id="fieldset">
 					  <legend>Book Information</legend>
-					  <input type="text" id="textBox" placeholder="ISBN no."><br>
-						<input type="text" id="textBox"placeholder="Book title"><br>
-					  <input type="text" id="textBox" placeholder="Author Name"><br>
-						<input type="text" id="textBox" placeholder="Quantity:"><br>
-						<input type="text" id="textBox" placeholder="Edition: "><br>
-						<input type="text" id="textBox" placeholder="No.pages:"><br>
+					  <input type="text" id="textBox"name="category" placeholder="Category"><br>
+						<input type="text" id="textBox" name="title" placeholder="Book title"><br>
+					  <input type="text" id="textBox" name="author_id" placeholder="Author Name"><br>
+						<input type="text" id="textBox" name="counts" placeholder="Book count"><br>
+						 <input type="submit" name="sender" value="Register Book" id="RegBOOKbtn"/>
 				 </fieldset>
 			 </form>
-			 <form>
+			
+			   <form action="librarianIndex.php" method="post">	
  				 <fieldset id="fieldset2">
- 					  <legend>Publisher Information</legend>
- 					  <input type="text" id="textBox2" placeholder="Publisher Name"><br>
- 						<input type="text" id="textBox2"placeholder="Contact"><br>
+ 					  <legend>Add author</legend>
+ 					  <input type="text" name="author_name"  id="textBox2" placeholder="Author Name"><br>
+ 						
  				 </fieldset>
+			     <input type="submit" name="submit" value="insert author" id="BOOKbtn"/>
  			 </form>
-			 <input type="submit" name="sender" value="Register Book" id="RegBOOKbtn"/>
 		</div>
 
 	</div>

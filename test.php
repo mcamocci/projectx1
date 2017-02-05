@@ -2,11 +2,33 @@
 
 
 require_once("Database.php");
+require_once("Author.php");
+require_once("Book.php");
+
+
 $database=new Database();
 
 $database->setNewCount(4,20);
 
+
+$authors=new Author();
+//$authors::insertAuthor("Alexander the great");
+
+$book=new Book();
+
+//insertBook($title,$category,$author,$copy_count)
+
+$book::insertBook("greens","jokes",1,45);
+
+
+
+
+
+
 echo gettype(mysqli_real_escape_string($database->connection,12));
+
+
+
 
 
 

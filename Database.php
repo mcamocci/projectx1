@@ -31,8 +31,7 @@ class Database{
     //get all books    
     public function getAllBooks(){
         
-            $querry="select Book.id,Book.title,Book.copy_count as count,CONCAT(Author.firstName,
-            CONCAT(' ',Author.lastName)) AS author from  Book JOIN Author ON
+            $querry="select Book.id,Book.title,Book.copy_count as count,Author.firstName AS author from  Book JOIN Author ON
                      Book.author=Author.id;";   
                               
             $resultset=$this->connection->query($querry);            
@@ -51,8 +50,7 @@ class Database{
     //get all availlable books    
     public function getAllAvaillableBooks($user_id){
         
-            $querry="select Book.id,Book.title,Book.copy_count as count,CONCAT(Author.firstName,
-            CONCAT(' ',Author.lastName)) AS author from  Book JOIN Author ON
+            $querry="select Book.id,Book.title,Book.copy_count as count,Author.firstName AS author from  Book JOIN Author ON
                      Book.author=Author.id AND Book.id 
                      NOT IN(SELECT Requested_Book.book_id FROM Requested_Book WHERE Requested_Book.user_id=$user_id) AND Book.copy_count>0;";   
                               
@@ -115,8 +113,7 @@ class Database{
     
     public function getMyBorrowings($user_id){
        
-        $querry=" select Requested_Book.id,Book.title,CONCAT(User.firstName,
-            CONCAT(' ',User.lastName)) AS username from  User JOIN Requested_Book ON
+        $querry=" select Requested_Book.id,Book.title,User.firstName AS username from  User JOIN Requested_Book ON
                      Requested_Book.user_id=User.id JOIN Book on Book.id=Requested_Book.book_id AND User.id='$user_id';";
         
          $resultset=$this->connection->query($querry);
@@ -135,8 +132,7 @@ class Database{
     public function getAllBorrowedBooks(){
     
     
-            $querry="select Book.id,Book.title,Book.copy_count as count,CONCAT(Author.firstName,
-            CONCAT(' ',Author.lastName)) AS author from  Book JOIN Author ON
+            $querry="select Book.id,Book.title,Book.copy_count as count,Author.firstName AS author from  Book JOIN Author ON
                      Book.author=Author.id AND Book.id in (select book_id from Borrowed_Book);";  
                
             $resultset=$this->connection->query($querry);
@@ -332,8 +328,7 @@ class Database{
     //this function is for the book searching process
     public function searchTheBooks($keyword){
         
-            $querry="SELECT Book.id,Book.title,Book.copy_count AS count,CONCAT(Author.firstName,
-            CONCAT(' ',Author.lastName)) AS author FROM  Author JOIN Book ON
+            $querry="SELECT Book.id,Book.title,Book.copy_count AS count,Author.firstName AS author FROM  Author JOIN Book ON
                      Book.author=Author.id AND Author.lastName LIKE '%$keyword%' 
                      OR Author.firstName LIKE '%$keyword%' OR Book.title LIKE '%$keyword';";   
                               
@@ -453,8 +448,7 @@ class Database{
      //get a book to edit   
     public function getABookToEdit($book_id){
         
-            $querry="select Book.id,Book.title,Book.copy_count as count,CONCAT(Author.firstName,
-            CONCAT(' ',Author.lastName)) AS author from  Book JOIN Author ON
+            $querry="select Book.id,Book.title,Book.copy_count as count,Author.firstName AS author from  Book JOIN Author ON
                      Book.author=Author.id AND Book.id=$book_id;";   
                               
             $resultset=$this->connection->query($querry);            
