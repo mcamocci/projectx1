@@ -265,15 +265,15 @@ legend{
 				<span class="logoutSection"><a href="index.php">Logout</a></span>
 			</div>
 		<div class="left_Dashboard">
-						<a href="#"><div class="dashboardBox">
+						<a href="allbook.php"><div class="dashboardBox">
 							&nbsp;&nbsp;All books
 							<span class="counter"><?php echo $database->getCountAllBook()?></span>
 						</div></a>
-		   			<a href="#"><div class="dashboardBox">
+		   			<a href="bookBorrowed.php"><div class="dashboardBox">
               &nbsp;&nbsp;Books borrowed
               <span class="counter"><?php echo $database->getCountAllBorrowedBook(); ?></span>
             </div></a>
-            <a href="#"><div class="dashboardBox">
+            <a href="bookAvailable.php"><div class="dashboardBox">
               &nbsp;&nbsp;Books Available
               <span class="counter"><?php echo $database->getCountAvaillable();?></span>
             </div></a>

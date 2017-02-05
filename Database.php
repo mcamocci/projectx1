@@ -32,13 +32,13 @@ class Database{
     //get all availlable books    
     public function getAllAvaillableBooks($user_id){
         
-            $querry=" select Book.id,Book.title,Book.copy_count as count,CONCAT(Author.firstName,
-            CONCAT(' ',Author.lastName)) AS author from  Author JOIN Book ON
-                     Book.author=Author.id AND Book.id NOT IN(SELECT id FROM 
-                     Borrowed_Book) AND Book.id NOT IN(SELECT id FROM Requested_Book WHERE Requested_Book.user_id='$user_id');";   
+            $querry="select Book.id,Book.title,Book.copy_count as count,CONCAT(Author.firstName,
+            CONCAT(' ',Author.lastName)) AS author from  Book JOIN Author ON
+                     Book.author=Author.id AND Book.id 
+                     NOT IN(SELECT Requested_Book.book_id FROM Requested_Book WHERE Requested_Book.user_id=$user_id) AND Book.copy_count>0;";   
                               
             $resultset=$this->connection->query($querry);            
-            $books;
+            $books=array();
             
             while($row=$resultset->fetch_assoc()){                
                     $books[]=$row;            
@@ -125,11 +125,6 @@ class Database{
             }            
             return $books;
     
-    }
-    
-    public function approveBorrowedBook($id){
-    
-        
     }
     
 
