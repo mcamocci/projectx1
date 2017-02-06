@@ -2,22 +2,18 @@
 
     require_once("Database.php");
     require_once("LoginProcessor.php");
+    require_once("Book.php");
     
     LoginProcessor::prepare();
     $user_id=$_SESSION["USER_ID"];    
     $database=new Database();
     
         
-    if(isset($_GET['id_to_borrow'])){  
-    
-        $book_id=$_GET['id_to_borrow'];
-      
-        $selected_books=$_GET['id_to_borrow'];
-        $database->requestABook($user_id,$book_id);       
-      
-    }else{
+    if(isset($_GET['id_to_cancel'])){      
+        $book_id=$_GET['id_to_cancel'];      
+        Book::cancelRequest($book_id,$user_id);        
     }
-
+    
 ?>    
     
 <!DOCTYPE html>
@@ -213,7 +209,8 @@ margin: 0 auto;
 			                echo "<td>".$books['id']."</td>";
 		                    echo "<td width='39%'>".$books['title']."</td>";
 		                    echo "<td width='25%'>".$books['username']."</td>";	                   
-		                    echo "<td><center><a id='borrow' href='studentIndex.php?id_to_cancel=".$books['id']."'>Cancel Request</a></center></td>";
+		                    echo "<td><center>
+		                    <a id='borrow' href='cancelRequest.php?id_to_cancel=".$books['id']."'>Cancel Request</a></center></td>";
 		                    echo"</tr>";
 			         }
 			    

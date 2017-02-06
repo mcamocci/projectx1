@@ -1,6 +1,5 @@
 <?php
 
-//require(Database.php);
 require_once("CommonInformation.php");
 require_once("Database.php");
 

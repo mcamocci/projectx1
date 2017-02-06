@@ -8,9 +8,11 @@ require_once("Book.php");
 
 $database=new Database();
 
-$database->setNewCount(4,20);
+//$database->setNewCount(4,20);
 
 
+
+/*
 $authors=new Author();
 //$authors::insertAuthor("Alexander the great");
 
@@ -20,20 +22,10 @@ $book=new Book();
 
 $book::insertBook("greens","jokes",1,45);
 
-
-
-
-
-
-echo gettype(mysqli_real_escape_string($database->connection,12));
-
-
-
-
+echo gettype(mysqli_real_escape_string($database->connection,12));*/
 
 
 /*
-
 
  echo "<br/>";
  

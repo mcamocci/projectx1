@@ -5,15 +5,17 @@ require_once("Book.php");
 require_once("Author.php");
 
 $database=new Database();
+$con=new Database();
+$connection=$con->connection;
+$authorObject=new Author();
 
 
 if(isset($_POST['author_name'])){  
   
     $author=new Author();
+    $name=mysqli_real_escape_string($connection,$_POST['author_name']);
     
-    $name=mysqli_real_escape_string($_POST['author_name']);
-    
-    $author::insertAuthor('$name');
+    $author::insertAuthor($name);
     
 }else if(isset($_POST['category'])&&
 
@@ -22,13 +24,19 @@ if(isset($_POST['author_name'])){
             isset($_POST['counts'])&&
             
              isset($_POST['author_id'])){
+                             
+                    if($_POST['author_id']!="Select Author Name"){
+                    
+                        $title=mysqli_real_escape_string($connection,$_POST['title']);
+                        $category=mysqli_real_escape_string($connection,$_POST['category']);
+                        $author_id=mysqli_real_escape_string($connection,$_POST['author_id']);
+                        $counts=mysqli_real_escape_string($connection,$_POST['counts']);
+                        $book=new Book();                    
+                        $book::insertBook($title,$category,$author_id,$counts);
+                        
+                    }
              
-                    $title=mysqli_real_escape_string($_POST['title']);
-                    $category=mysqli_real_escape_string($_POST['category']);
-                    $author_id=mysqli_real_escape_string($_POST['author_id']);
-                    $counts=mysqli_real_escape_string($_POST['counts']);
-                    $book=new Book();                    
-                    $book::insertBook($title,$category,$author_id,$counts);
+                    
 
     }
 
@@ -40,7 +48,7 @@ if(isset($_POST['author_name'])){
 	<title></title>
 	<link rel="stylesheet" type="text/css" href="css/stylesheet.css">
 	<style type="text/css">
-	
+
 	* input:focus {
 		outline: none;
 	  box-shadow:none;
@@ -279,6 +287,19 @@ legend{
 	font-size: 10pt;
 	font-weight:normal;
 }
+#btn{
+  clear: both;
+	margin:5px 0px;
+	width: auto;
+	height: 25px;
+	border:0px solid #E0DFE2;
+	background-color:#6CC7FB;
+	color: #Fff;
+	font-family: 'source sans pro',sans-serif;
+	font-size: 10pt;
+	font-weight:normal;
+  text-transform: capitalize;
+}
 </style>
 </head>
 <body>
@@ -318,23 +339,33 @@ legend{
 		<div id="content_col">
 			<h3 id="heading">Add new book(s)</h3>
 			<hr id="hrzLine">
-			<form action="librarianIndex.php" method="post">	 <fieldset id="fieldset">
+			<form action="librarianIndex.php" method="post">
+        <fieldset id="fieldset">
 					  <legend>Book Information</legend>
 					  <input type="text" id="textBox"name="category" placeholder="Category"><br>
 						<input type="text" id="textBox" name="title" placeholder="Book title"><br>
-					  <input type="text" id="textBox" name="author_id" placeholder="Author Name"><br>
+						<select name="author_id" id="textBox">
+						 <option>Select Author Name</option>";
+						 
+						    <?php 						    
+						        $authors=$authorObject::getAuthorNames();						     
+						        foreach($authors as $author){
+						            echo "<option>".$author['firstName']."</option>";
+						        }
+						        
+						    ?>
+						</select><br>	
 						<input type="text" id="textBox" name="counts" placeholder="Book count"><br>
-						 <input type="submit" name="sender" value="Register Book" id="RegBOOKbtn"/>
+						 <input type="submit" name="sender" value="Register Book" id="btn"/>
 				 </fieldset>
 			 </form>
-			
-			   <form action="librarianIndex.php" method="post">	
+
+			   <form action="librarianIndex.php" method="post">
  				 <fieldset id="fieldset2">
  					  <legend>Add author</legend>
  					  <input type="text" name="author_name"  id="textBox2" placeholder="Author Name"><br>
- 						
+            <input type="submit" name="submit" value="insert author" id="btn"/>
  				 </fieldset>
-			     <input type="submit" name="submit" value="insert author" id="BOOKbtn"/>
  			 </form>
 		</div>
 

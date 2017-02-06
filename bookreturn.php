@@ -8,8 +8,9 @@ if(isset($_GET['book_to_return'])&& isset($_GET['user_to_return'])){
 
     $book_id=$_GET['book_to_return'];
     $user_id=$_GET['user_to_return'];
-        
+  
     $database->returnBorrowedBook($book_id,$user_id); 
+   
            
 }
 

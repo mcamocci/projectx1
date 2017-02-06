@@ -9,10 +9,9 @@ class Database{
         $this->connection=new mysqli($host,$username,$password,$database);            
     }
     
-    //get all borrowedBook for returning them.
     public function getAllBorrowedToReturn(){
         
-            $querry=" SELECT Borrowed_Book.id,Borrowed_Book.date_return as dayto,
+            $querry=" SELECT Borrowed_Book.id as bid, Book.id as id ,Borrowed_Book.date_return as dayto,
             User.firstName as user_name,Borrowed_Book.user_id as user_id,Book.title FROM Borrowed_Book JOIN Book 
             ON Borrowed_Book.book_id=Book.id JOIN User ON Borrowed_Book.user_id=User.id;";   
                               
@@ -46,42 +45,56 @@ class Database{
     }
     
     
-
-    //get all availlable books    
-    public function getAllAvaillableBooks($user_id){
+    public function getCountsBorrowingOrRequest($user_id){
         
-            $querry="select Book.id,Book.title,Book.copy_count as count,Author.firstName AS author from  Book JOIN Author ON
-                     Book.author=Author.id AND Book.id 
-                     NOT IN(SELECT Requested_Book.book_id FROM Requested_Book WHERE Requested_Book.user_id=$user_id) AND Book.copy_count>0;";   
-                              
-            $resultset=$this->connection->query($querry);            
-            $books=array();
-            
-            while($row=$resultset->fetch_assoc()){                
-                    $books[]=$row;            
-            }
-            
-            return $books;
-    
+        $countOneSql="SELECT COUNT(*) as total FROM Borrowed_Book WHERE Borrowed_Book.user_id=$user_id;";
+        $countTwoSql="SELECT COUNT(*) as total FROM Requested_Book WHERE Requested_Book.user_id=$user_id;";
+        
+        $countOne=0;
+        $countTwo=0;
+        
+        $resultsetOne=$this->connection->query($countOneSql);
+        
+        while($row=$resultsetOne->fetch_assoc()){
+            $countOne=$row['total'];
+        }
+        
+        $resultsetTwo=$this->connection->query($countOneSql);
+        
+        while($row=$resultsetTwo->fetch_assoc()){
+            $countTwo=$row['total'];
+        }
+        
+         
+        $total=$countOne+$countTwo;
+        
+        echo $total;
+        
+        return $total;
+        
     }
     
-    
     public function requestABook($user_id,$book_id){
-                  
-          $querry="insert into Requested_Book(user_id,book_id) values('$user_id','$book_id')";            
+    
+    
+          if($this->getCountsBorrowingOrRequest($user_id)<5){
           
-          if( $this->connection->query($querry)){            
-                return 1;         
-          }else{
-               return 0;
-          }       
-        
+                $querry="insert into Requested_Book(user_id,book_id) values('$user_id','$book_id')";            
+          
+              if( $this->connection->query($querry)){            
+                    return 1;         
+              }else{
+                   return 0;
+              }       
+          }                  
+          
     }
     
     
     public function getAllRequestedBooksToApprove(){
         $querry="SELECT Requested_Book.user_id as user_id,Requested_Book.id as request_id,Book.id as book_id,
-        User.firstName,Book.title FROM Requested_Book JOIN Book on   Requested_Book.book_id=Book.id JOIN User on Requested_Book.user_id=User.id;";
+        User.firstName,Book.title FROM Requested_Book JOIN Book on   Requested_Book.book_id=Book.id JOIN User ON 
+        Requested_Book.user_id=User.id;";
         
         $resultset=$this->connection->query($querry);
                 
@@ -113,7 +126,7 @@ class Database{
     
     public function getMyBorrowings($user_id){
        
-        $querry=" select Requested_Book.id,Book.title,User.firstName AS username from  User JOIN Requested_Book ON
+        $querry=" select Requested_Book.id as bid,Book.id as id ,Book.title,User.firstName AS username from  User JOIN Requested_Book ON
                      Requested_Book.user_id=User.id JOIN Book on Book.id=Requested_Book.book_id AND User.id='$user_id';";
         
          $resultset=$this->connection->query($querry);
@@ -167,8 +180,7 @@ class Database{
         }
     }
     
-    
-    //this function is for the user registration in the database    
+       
     public function registerUser($id,$firstName,$lastName,$phone,$role,$password){   
              
         if($role==0){
@@ -200,7 +212,6 @@ class Database{
     }
     
       
-    //get the count of all availlable books
     public function getCountAvaillable(){
         $querry="SELECT SUM(Book.copy_count) as total FROM Book WHERE Book.copy_count>0;"; 
         $resultset=$this->connection->query($querry);
@@ -213,7 +224,6 @@ class Database{
     }
     
     
-    //get the count of all the books
     public function getCountAllBook(){
         $querry="SELECT SUM(Book.copy_count) as total FROM Book"; 
         $resultset=$this->connection->query($querry);
@@ -240,7 +250,6 @@ class Database{
     }
     
     
-    //get the count of all borrowed books
     public function getCountAllBorrowedBook(){
         $querry="SELECT COUNT(*) as total FROM Borrowed_Book"; 
         $resultset=$this->connection->query($querry);
@@ -253,7 +262,6 @@ class Database{
     }
 
 
-    //this function is for borrowing book///        
     public function borrowABook($user_id,$book_id){  
     
         $dateBorrowed=date('Y-m-d H:i:s');
@@ -275,75 +283,25 @@ class Database{
             }               
         }
         
-       
     }
     
-    //this function is for returning the borrowed book.    
+    
     public function returnBorrowedBook($book_id,$user_id){
     
-        echo "test 1 passed";
-        
-        
         $querry="DELETE FROM Borrowed_Book WHERE book_id=$book_id AND user_id=$user_id;";
         $resultset=$this->connection->query($querry);   
         if($resultset){
         
-            echo "test 2 passed";
             if($this->increaseBookCount($book_id)){
-                echo "test 3 passed";
+                 return 1;
             }else{
-                echo "test 3 faile";
+                return 0;
             }
             
         }     
     
     }
-    
-    //this function is to get top three books which are to be returned earlier.    
-     public function getTheThree($book_id){    
-             
-        $querry="SELECT Book.id as id ,lastName,Book.title,date_borrowed,date_return,TIMESTAMPDIFF(DAY,date_borrowed,date_return) 
-        AS DATE,TIMESTAMPDIFF(MINUTE,date_borrowed,date_return) 
-        AS MINUTES FROM Borrowed_Book JOIN Book ON Book.id=Borrowed_Book.book_id JOIN User ON User.id=Borrowed_Book.user_id
-        WHERE Book.id=$book_id ORDER BY MINUTES LIMIT 3;";
-                
-        $resultset=$this->connection->query($querry);
-        $topThree;
-                
-        $tracker=false;        
-        while($row=$resultset->fetch_assoc()){   
-             $tracker=true;     
-             $topThree[]=$row;        
-        }        
-        if($tracker){
-            return $topThree;
-        }else{
-               $topThree=array();
-               return $topThree;
-        }
-         
-    }
-    
-    
-    //this function is for the book searching process
-    public function searchTheBooks($keyword){
-        
-            $querry="SELECT Book.id,Book.title,Book.copy_count AS count,Author.firstName AS author FROM  Author JOIN Book ON
-                     Book.author=Author.id AND Author.lastName LIKE '%$keyword%' 
-                     OR Author.firstName LIKE '%$keyword%' OR Book.title LIKE '%$keyword';";   
-                              
-            $resultset=$this->connection->query($querry);            
-            $books;
-            
-            while($row=$resultset->fetch_assoc()){                
-                    $books[]=$row;            
-            }
-            
-            return $books;
-    
-    }
-    
-    //this function is for decreasing the number of books    
+      
     public function decreaseBookCount($book_id){
     
         $sql="SELECT copy_count FROM Book WHERE Book.id =$book_id";
@@ -363,8 +321,7 @@ class Database{
         
     }
     
-    
-     //set new book counts   
+      
     public function setNewCount($book_id,$count){
     
         $sql="UPDATE Book SET copy_count=$count WHERE Book.id=$book_id";
@@ -377,7 +334,6 @@ class Database{
     
     }
     
-    //this function is for increasing the number of books    
     public function increaseBookCount($book_id){
     
         $sql="SELECT copy_count FROM Book WHERE Book.id =$book_id";
@@ -396,8 +352,7 @@ class Database{
         }
     
     }
-    
-    //this function is for getting the single row of user from the database for the password comparison    
+      
     public function getRow($id){
         $sql="SELECT * FROM User WHERE id='$id'";
         $resultSet=$this->connection->query($sql);
@@ -410,8 +365,7 @@ class Database{
         return $the_single_row;          
         
     }
-    
-    //this function is for getting the single row of user from the database for the password comparison    
+       
     public function getPs($id){
         $sql="SELECT Password FROM Librarian WHERE id='$id'";
         $resultSet=$this->connection->query($sql);
@@ -424,8 +378,6 @@ class Database{
         return $the_single_row[0]['Password'];           
         
     }
-    
-    //this function is for deleting the requested_book
     
     public function deleteRequestedBook($user_id,$book_id){
         
@@ -445,7 +397,7 @@ class Database{
     
     }   
     
-     //get a book to edit   
+    
     public function getABookToEdit($book_id){
         
             $querry="select Book.id,Book.title,Book.copy_count as count,Author.firstName AS author from  Book JOIN Author ON

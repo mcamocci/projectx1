@@ -2,14 +2,24 @@
 
     require_once("Database.php");
     require_once("LoginProcessor.php");
+    require_once("Book.php");
     
     LoginProcessor::prepare();
-    $user_id=$_SESSION["USER_ID"];    
-    $database=new Database();
+    
+    $user_id=null;
+    
+    if($user_id=$_SESSION["USER_ID"]){
+        $user_id=$_SESSION["USER_ID"];
+    }else{
+    
+        header("Location: index.php");
+        
+    }    
+    
     
         
     if(isset($_GET['id_to_borrow'])){  
-    
+        $database=new Database();
         $book_id=$_GET['id_to_borrow'];
       
         $selected_books=$_GET['id_to_borrow'];
@@ -185,9 +195,9 @@ margin: 0 auto;
 	<h3 id="bigTitle">digital book borrow</h3></div>
 	<div class="indexcont_container">
 			<div class="head">
-				<span class="searchBoxHOLDER">
-				<input type="text" name="" placeholder="Book Title, Author" id="searchBox">
-				<input type="submit" name="" class="searchIcon">
+				<span class="searchBoxHOLDER"><form action="studentIndex.php" method="post">
+				<input type="text" name="search" placeholder="Book Title, Author" id="searchBox">
+				<input type="submit" name="" class="searchIcon"></form>
 				</span>
 					<span class="logoutSection"><a href="index.php?logUserout=true">Logout</a></span>
 		</div>
@@ -209,13 +219,14 @@ margin: 0 auto;
 			
 			    <?php
 			    
-			         foreach($database->getAllAvaillableBooks($user_id) as $books){
+			         foreach(Book::getAllAvaillableBooks($user_id) as $books){
 			                echo "<tr>";
 			                echo "<td>".$books['id']."</td>";
 		                    echo "<td width='39%'>".$books['title']."</td>";
 		                    echo "<td width='25%'>".$books['author']."</td>";
-		                    echo "<td  width='10%' align='center'>".$books['count']."</td>";		                   
-		                    echo "<td><center><a id='borrow' href='studentIndex.php?id_to_borrow=".$books['id']."'>Request</a></center></td>";
+		                    echo "<td  width='10%' align='center'>"
+		                    .Book::resolveConflicts($books['id'],$books['count'])."</td>";		                   
+		                    echo "<td><center>".Book::resolveChoice($books['id'],$books['count'])."</center></td>";
 		                    echo"</tr>";
 			         }
 			    
